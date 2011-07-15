@@ -76,9 +76,9 @@ class Database{
      * Select and return a query
      * @param $statement
      */    
-    public function select($statement){
+    public function select($statement, $data){
     	$this->statement = $this->database->prepare($statement);
-    	$this->statement->execute();
+    	$this->statement->execute($data);
     	return $this->statement->fetchAll();
     }
     

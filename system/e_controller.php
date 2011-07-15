@@ -12,7 +12,7 @@
  * @since July 4, 2011
  * 
  */
-abstract class E_Controller extends Core{
+class E_Controller extends Core{
 	public $view;
 	public $db;
 	
@@ -21,7 +21,7 @@ abstract class E_Controller extends Core{
 	 * E_Controller constructor. Does nothing at the moment.
 	 */
 	public function __construct(){
-		
+		parent::__construct();
 	}
 	
 	/**
@@ -92,5 +92,21 @@ abstract class E_Controller extends Core{
 
 
     	return $response;
+	}
+	
+	public function require_login($path){
+		if(isset($_SESSION['username']) && isset($_SESSION['password'])){
+			return true;
+		}
+		header('Location: '.$path);
+	}
+	
+	public function load_model($model){
+	    // Load the model
+        if(file_exists(APP_PATH.'/'.MODELS.'/'.$model.'Model.php')){
+            include(APP_PATH.'/'.MODELS.'/'.$model.'Model.php');
+        }
+        
+        $this->$model =  new $model();
 	}
 }

@@ -8,13 +8,14 @@ require(SYSTEM_PATH.'/config.php');
 require(SYSTEM_PATH.'/database.php');
 require(SYSTEM_PATH.'/logger.php');
 require(SYSTEM_PATH.'/e_controller.php');
+require(SYSTEM_PATH.'/e_model.php');
 
 /*
  * ------------------------------
- * Start the Core framework class
+ * Start the session
  * ------------------------------
  */
-$core = new Core();
+session_start();
 
 /*
  * -------------------------------
@@ -36,8 +37,10 @@ if($route_count >= 2){
 	if($route_count > 3){
 	   $parameters = array_slice($routes, 3, $route_count-3);
 	}
-}else{
-	$controller = $core->default_controller;
+}
+// If no contoller is found
+if(!isset($controller) || strlen($controller) < 1){
+	$controller = DEFAULT_CONTROLLER;
 }
 // Load the controller
 $controller_name = $controller.'Controller';
@@ -50,11 +53,12 @@ if(!file_exists($controller) && file_exists(APP_PATH.'/'.CONTROLLERS.'/'.$contro
    // Instantiate controller files
    $$controller = new $controller_name();
    
-   // Make sure the method can be called
-   if(!$method){
+   // If method is invalid
+   if(!isset($method) || strlen($method)<1){
    	   $method = "index";
    }
    
+   // Make sure the method can be called
    if(is_callable(array($$controller, $method))){
    	   // Call method and pass the parameters
        call_user_func_array(array($$controller, $method), $parameters);
@@ -74,9 +78,9 @@ if(!file_exists($controller) && file_exists(APP_PATH.'/'.CONTROLLERS.'/'.$contro
  * @since July 4, 2011 
  */
 class Core{
-	private $config;
-	public $default_controller;
+	public $config;
 	public $web_path;
+	public $database;
 	
 	/**
 	 * 
@@ -84,9 +88,10 @@ class Core{
 	 */
 	public function __construct(){
 		$this->config = new Config(APP_INI);
-		$this->default_controller = $this->config->settings['default_controller'];
+		//$this->default_controller = $this->config->settings['default_controller'];
 		
 		define('WEB_PATH', $this->config->settings['web_path']);
 		define('SECURE_WEB_PATH', $this->config->settings['secure_path']);
+		$this->database = Database::getDatabase();
 	}
 }
