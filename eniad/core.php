@@ -88,7 +88,6 @@ class Core{
 	 */
 	public function __construct(){
 		$this->config = new Config(APP_INI);
-		//$this->default_controller = $this->config->settings['default_controller'];
 		
 		define('WEB_PATH', $this->config->settings['web_path']);
 		define('SECURE_WEB_PATH', $this->config->settings['secure_path']);
