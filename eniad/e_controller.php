@@ -130,7 +130,7 @@ class E_Controller extends Core{
 	
 	public function load_model($model){
 	    // Load the model
-        if(file_exists(APP_PATH.'/'.MODELS.'/'.$model.'Model.php')){
+	    if(file_exists(APP_PATH.'/'.MODELS.'/'.$model.'Model.php')){
             include(APP_PATH.'/'.MODELS.'/'.$model.'Model.php');
         }
         
