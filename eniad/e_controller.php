@@ -94,8 +94,20 @@ class E_Controller extends Core{
     	return $response;
 	}
 	
-	public function require_login($path){
-		if(isset($_SESSION['username']) && isset($_SESSION['password'])){
+	/**
+	 * 
+	 * Check if a session exists for a user. Redirect them to $path if none is set 
+	 * @param $path The path to redirect the user to login
+	 * @param $sessionvars The session variables. Default are username and password
+	 */
+	public function require_login($path, $sessionvars = array('username', 'password')){
+		$logged_in = true;
+		foreach($sessionvars as $svar){
+			if(!isset($_SESSION[$svar])){
+				$logged_in = false;
+			}
+		}
+		if($logged_in){
 			return true;
 		}
 		header('Location: '.$path);
