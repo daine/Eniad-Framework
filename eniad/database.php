@@ -100,6 +100,14 @@ class Database{
     
     /**
      * 
+     * Get the last inserted ID
+     */
+    public function getlastInsertId(){
+    	return $this->database->lastInsertId();
+    }
+    
+    /**
+     * 
      * Use this method if you need to reinstantiate the database
      */
     public function getDatabase(){

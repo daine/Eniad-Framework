@@ -38,7 +38,6 @@ class E_Controller extends Core{
 	 */
 	public function __construct(){
 		parent::__construct();
-		$this->db = Database::getDatabase();
 	}
 	
 	/**
@@ -107,6 +106,8 @@ class E_Controller extends Core{
 		$response = curl_exec($handle);
 		$code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
 		
+		$this->load_logger('curlcalls.log');
+		$this->logger->debug($this->url);
 		return $response;
 	}
 	

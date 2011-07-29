@@ -49,7 +49,7 @@ class Logger{
 	{
 		if(file_exists($this->filename)){
 			chmod($this->filename, 0660);
-			chgrp($this->filename, 'linkshiftr');
+			//chgrp($this->filename, 'linkshiftr');
 		}
 		$log_message = date('Y-m-d H:i:s')." [$type] $message \n";
 		$fh = fopen($this->filename, 'a');

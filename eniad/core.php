@@ -41,15 +41,19 @@ session_start();
  * -------------------------------
  */
 $query = $_SERVER['QUERY_STRING'];
-$routes = explode("/", $_SERVER['PATH_INFO']);
+$routes = array();
+$parameters = array();
+
+if(isset($_SERVER['PATH_INFO'])){
+    $routes = explode("/", $_SERVER['PATH_INFO']);
+}
 $route_count = count($routes);
 if($route_count >= 2){
 	// Controller is the first string: index.php/mycontroller
 	$controller = $routes[1];
 	
 	// Method is located at the second string: index.php/mycontroller/myfunction
-	$method = $routes[2];
-	$parameters = array();
+	$method = $routes[2];	
 
 	// Anything after the second string contains the parameters: index.php/mycontroller/myfunction/id/shoes
 	if($route_count > 3){
@@ -99,6 +103,7 @@ class Core{
 	public $config;
 	public $web_path;
 	public $database;
+	public $logger;
 	
 	/**
 	 * 
