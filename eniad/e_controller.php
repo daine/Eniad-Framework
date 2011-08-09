@@ -108,6 +108,7 @@ class E_Controller extends Core{
 		
 		$this->load_logger('curlcalls.log');
 		$this->logger->debug($this->url);
+		$this->logger->debug(print_r($response, true));
 		return $response;
 	}
 	
@@ -133,9 +134,9 @@ class E_Controller extends Core{
 	public function load_model($model){
 	    // Load the model
 	    if(file_exists(APP_PATH.'/'.MODELS.'/'.$model.'Model.php')){
-                include(APP_PATH.'/'.MODELS.'/'.$model.'Model.php');
-            }
+            include(APP_PATH.'/'.MODELS.'/'.$model.'Model.php');
+        }
         
-            $this->$model =  new $model();
+        $this->$model =  new $model();
 	}
 }
