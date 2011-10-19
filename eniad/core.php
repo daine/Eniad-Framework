@@ -33,6 +33,7 @@ require(SYSTEM_PATH.'/e_model.php');
  * Start the session
  * ------------------------------
  */
+
 session_start();
 
 /*
@@ -40,20 +41,24 @@ session_start();
  * Load a specified controller
  * -------------------------------
  */
-$query = $_SERVER['QUERY_STRING'];
+$query = (isset($_SERVER['QUERY_STRING']))?$_SERVER['QUERY_STRING']:'';
 $routes = array();
 $parameters = array();
 
 if(isset($_SERVER['PATH_INFO'])){
     $routes = explode("/", $_SERVER['PATH_INFO']);
+}else if(defined('STDIN')){
+	$routes = $argv;
 }
 $route_count = count($routes);
 if($route_count >= 2){
 	// Controller is the first string: index.php/mycontroller
 	$controller = $routes[1];
 	
-	// Method is located at the second string: index.php/mycontroller/myfunction
-	$method = $routes[2];	
+	if($route_count > 2 ){
+		// Method is located at the second string: index.php/mycontroller/myfunction
+		$method = $routes[2];
+	}	
 
 	// Anything after the second string contains the parameters: index.php/mycontroller/myfunction/id/shoes
 	if($route_count > 3){
@@ -88,7 +93,7 @@ if(!file_exists($controller) && file_exists(APP_PATH.'/'.CONTROLLERS.'/'.$contro
    	   exit("Unable to call method `$method` on $controller");
    }   
 }else{
-	exit("Unable to load controller `$controller`");
+	exit("Unable to load controller `$controller` looking at ".APP_PATH.'-'.CONTROLLERS.'-'.$controller_name.'.php');
 }
 
 /**
@@ -112,8 +117,12 @@ class Core{
 	public function __construct(){
 		$this->config = new Config(APP_INI);
 		
-		define('WEB_PATH', $this->config->settings['web_path']);
-		define('SECURE_WEB_PATH', $this->config->settings['secure_path']);
+		if(!defined('WEB_PATH')){
+			define('WEB_PATH', $this->config->settings['web_path']);
+		}
+		if(!defined('SECURE_WEB_PATH')){
+			define('SECURE_WEB_PATH', $this->config->settings['secure_path']);
+		}
 		$this->database = Database::getDatabase();
 	}
 }

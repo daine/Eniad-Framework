@@ -57,7 +57,7 @@ class Database{
      * @param $statement Example: INSERT INTO users (name, ip) VALUES (:name, :ip)
      * @param $data Example: array(':name'=>'Daine', ':ip'=>'192.168.1.1')
      */
-	public function insert($statement, $data){
+	public function insert($statement, $data = array()){
     	$this->statement = $this->database->prepare($statement);
     	$this->statement->execute($data);
     	return $this->statement->errorInfo();
@@ -69,7 +69,7 @@ class Database{
      * @param $statement Example: UPDATE users SET name=?, ip=? WHERE id=?
      * @param $data Example: array('Daine','192.168.1.1','2')
      */
-	public function update($statement, $data){
+	public function update($statement, $data = array()){
     	$this->statement = $this->database->prepare($statement);
     	$this->statement->execute($data);
     	return $this->statement->errorInfo();
@@ -81,7 +81,7 @@ class Database{
      * @param $statement Example: DELETE FROM users WHERE id=?
      * @param $data Example: array('2')
      */
-	public function delete($statement, $data){
+	public function delete($statement, $data = array()){
     	$this->statement = $this->database->prepare($statement);
     	$this->statement->execute($data);
     	return $this->statement->errorInfo();
@@ -92,7 +92,7 @@ class Database{
      * Select and return a query
      * @param $statement
      */    
-    public function select($statement, $data){
+    public function select($statement, $data = array()){
     	$this->statement = $this->database->prepare($statement);
     	$this->statement->execute($data);
     	return $this->statement->fetchAll();

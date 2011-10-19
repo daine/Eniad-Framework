@@ -85,17 +85,27 @@ class E_Controller extends Core{
 	 * @param array $params An array containing parameters to send
 	 * @return mixed The raw response of the cURL call
 	 */
-	public function call_url($path, $params){
+	public function call_url($path, $params=array(), $cookies = array()){
 		$string = array();
 			foreach($params as $key=>$value){
 			$string[] .= $key."=".$value;
 		}
 		$this->params = implode('&', $string);
 		$this->path = $path;
-		$this->url = $this->path."?".$this->params;
-		        
+		if(strlen($this->params) > 0){
+			$this->url = $this->path."?".$this->params;
+		}else{
+			$this->url = $this->path;
+		}
+		
 		$handle = curl_init();
+		
+		if(isset($cookies['cookie']) && $cookies['cookie'] == true){
+			curl_setopt($handle, CURLOPT_COOKIEJAR, $cookies['cookiejar']);
+        	curl_setopt($handle, CURLOPT_COOKIEFILE, $cookies['cookiejar']);  
+		}
 		curl_setopt($handle, CURLOPT_URL, $this->path);
+		curl_setopt($handle, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
